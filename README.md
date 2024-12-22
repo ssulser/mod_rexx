@@ -1,5 +1,5 @@
 # mod_rexx
-The original mod_rexx doesn't compile with regina-rexx. I made some adaptions and got it working on my Raspberry Pi Server.
+The original mod_rexx https://sourceforge.net/projects/modrexx/files/mod_rexx/2.4.0/ doesn't compile with regina-rexx. I made some adaptions and got it working on my Raspberry Pi Server.
 
 
 ## Things I did (just for me to remember)
