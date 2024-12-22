@@ -22,6 +22,11 @@ enclose every call to modrexx_error() with pragmas:
 modrexx_error(...)
 #pragma GCC diagnostic pop
 
+change definition of those 3 functions to:
+- LONG APIENTRY Rexx_IO_Exit(LONG ExitNumber, LONG Subfunction, PEXIT ParmBlock)
+- LONG APIENTRY Rexx_IO_Exit_2(LONG ExitNumber, LONG Subfunction, PEXIT ParmBlock)
+- LONG APIENTRY Rexx_INI_Exit(LONG ExitNumber, LONG Subfunction, PEXIT ParmbBlock)
+
 start compiling with rexx make_mod_rexx.rex regina
 - but before that makefile.linux needs some changes
 - path to apxs is wrong with an apache standard installation
