@@ -1,0 +1,17 @@
+#
+# Mod_Rexx incorporates a Rexx interpreter into the Apache web server,
+# so that the Apache web server can directly execute Rexx code.
+# Mod_Rexx links the Rexx runtime library into the Apache web server
+# and provides a Rexx external function interface for Apache's C
+# language API.  The end result is a quicker CGI script turnaround
+# process, since no external Rexx interpreter has to be started.
+#
+# Note:
+#
+# This file can be used on Windows as well as Linux but the entries
+# will need to be modified to conform to the Windows conventions and
+# specific needs of the installed Rexx and Apache configuration.
+#
+
+LoadModule rexx_module /usr/lib/apache2/modules/mod_rexx.so
+
