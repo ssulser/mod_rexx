@@ -1,0 +1,113 @@
+#-- Makefile -------------------------------------------------------------------
+#
+# Author:      W. David Ashley
+#
+# Description: Makefile for mod_rexx.dll using Microsoft Visual C++
+#
+# Copyright (C) The Programmers' Guild, Inc. 2020. All Rights Reserved.
+# Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.
+#
+# This software is subject to the terms of the Commom Public License. You
+# must accept the terms of this license to use this software. Refer to
+# the file CPLv1.0.htm included in this package for more information.
+#
+# The program is provided "as is" without any warranty express or implied,
+# including the warranty of non-infringement and the implied warranties of
+# merchantibility and fitness for a particular purpose.
+#
+# Notes:
+#
+# 1. Be sure to read the entire makefile, especially if you are using Regina
+#    Rexx.
+#
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+#
+#  Start user modification section
+#
+#-------------------------------------------------------------------------------
+
+# Select the Rexx interpreter you are using.
+!ifndef REXXINT
+# Valid settings are REGINA or OORexx.
+REXXINT     = OOREXX
+!endif
+
+# Set the base Apache path.
+#AP_PATH     = "c:\Program Files\Apache Software Foundation\Apache2.2"
+AP_PATH     = "D:\apache\Apache24"
+
+# Set the base Rexx path.
+!if "$(REXXINT)" == "OOREXX"
+RX_PATH     = "D:\ooRexx\ooRexx5.0.0"
+!else
+RX_PATH     = "c:\regina"
+!endif
+
+#-------------------------------------------------------------------------------
+#
+#  End user modification section
+#
+#-------------------------------------------------------------------------------
+
+!if "$(REXXINT)" == "OOREXX"
+# Stuff for Open Object Rexx
+LIBS          = $(AP_PATH)\lib\libhttpd.lib \
+                $(AP_PATH)\lib\libapr-1.lib \
+                $(RX_PATH)\api\rexx.lib \
+                $(RX_PATH)\api\rexxapi.lib
+INCLUDES    = /I $(AP_PATH)\include \
+              /I $(RX_PATH)\api
+DEFINES     = /DHAVE_RexxWaitForTermination
+!elseif "$(REXXINT)" == "REGINA"
+# Stuff for Regina Rexx
+LIBS          = $(AP_PATH)\lib\libhttpd.lib \
+                $(AP_PATH)\lib\libapr-1.lib \
+                $(RX_PATH)\lib\regina.lib
+INCLUDES    = /I $(AP_PATH)\include \
+              /I $(RX_PATH)\include
+DEFINES     = /DUSE_REGINA
+!else
+# Stuff for Rexx/Trans
+LIBS          = $(AP_PATH)\lib\libhttpd.lib \
+                $(AP_PATH)\lib\libapr-1.lib \
+                $(RX_PATH)\rexxtrans.lib
+INCLUDES    = /I $(AP_PATH)\include \
+              /I $(RX_PATH)
+DEFINES     = /DUSE_REXXTRANS
+!endif
+
+#GCFLAGS       = /nologo /c /showIncludes /EHsc /MT /W1 $(DEFINES) \
+GCFLAGS       = /nologo /c                /EHsc /MT /W1 $(DEFINES) \
+                /D_CONSOLE /DWIN32 $(INCLUDES)
+
+            #   /P /C                               \  TPG: collect preprocessor output to *.i file
+
+GLFLAGS       = /nologo /DLL 
+
+GLBDEP        = mod_rexx.h makefile.nt
+
+OBJS          = mod_rexx.obj dirconfig.obj rxfuncs.obj handlers.obj
+
+all           : mod_rexx.dll
+
+mod_rexx.dll  : $(OBJS)
+                link $(OBJS) $(GLFLAGS) $(LIBS) /OUT:$(@R).dll /implib:$(@R).lib /PDB:$(@R).pdb
+
+mod_rexx.obj  : $(@R).c $(GLBDEP)
+                cl $(GCFLAGS) $(@R).c
+
+dirconfig.obj : $(@R).c $(GLBDEP)
+                cl $(GCFLAGS) $(@R).c
+
+rxfuncs.obj   : $(@R).c $(GLBDEP)
+                cl $(GCFLAGS) $(@R).c
+
+handlers.obj  : $(@R).c $(GLBDEP)
+                cl $(GCFLAGS) $(@R).c
+
+cleanall      :
+                del *.obj *.pdb *.idb *.ilk *.exp vc6?.* mod_rexx.dll mod_rexx.lib
+

@@ -1,0 +1,74 @@
+<?rexx
+/*----------------------------------------------------------------------------*/
+/*                                                                            */
+/* Module:      rsptest1.rsp                                                  */
+/*                                                                            */
+/* Author:      Terry Fuller                                                  */
+/* Author:      W. David Ashley                                               */
+/*                                                                            */
+/* Description: Test RSP page. Simple RSP test page.                          */
+/*                                                                            */
+/* Copyright (C) The Programmers' Guild, Inc. 2021. All Rights Reserved.      */
+/* Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.              */
+/*                                                                            */
+/* This software is subject to the terms of the Commom Public License. You    */
+/* must accept the terms of this license to use this software. Refer to       */
+/* the file CPLv1.0.htm included in this package for more information.        */
+/*                                                                            */
+/* The program is provided "as is" without any warranty express or implied,   */
+/* including the warranty of non-infringement and the implied warranties of   */
+/* merchantibility and fitness for a particular purpose.                      */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+?>
+<html>
+<head>
+<title>RSP Test Page #1</title>
+</head>
+<body>
+
+<center><h1>RSP Test Page #1</h1></center>
+
+<p>This is some straight HTML text in the RSP file.</p>
+
+<p>The following time stamp is produced by Rexx using the short tag form.</p>
+<pre>
+<?rexx
+say date() time()
+?>
+</pre>
+
+<p>This is more straight HTML text in the RSP file.</p>
+
+<p>The following time stamp is produced by Rexx using the long form
+of the SCRIPT tag.</p>
+<pre>
+<script type="rexx">
+say date() time()
+</script>
+</pre>
+
+<p>The following time stamp is produced by Rexx using the long depricated form
+of the SCRIPT tag.</p>
+<pre>
+<script language="rexx">
+say date() time()
+</script>
+</pre>
+
+<p>This is more straight HTML text in the RSP file.</p>
+
+<p>This is a really long HTML line to see if the code for splitting HTML lines in an RSP file is being done correctly. Look at the browser HTML source to see if the line has been split.</p>
+
+<p>The following displays some lines from the module commentary:
+<?rexx
+  hdrl=25
+  say "<pre>"
+  loop i=hdrl+5 to hdrl+11
+  say sourceline(i)
+  end
+  say "</pre>"
+?>
+
+</body>
+</html>

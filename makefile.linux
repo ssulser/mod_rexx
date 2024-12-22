@@ -1,0 +1,105 @@
+#-- Makefile -------------------------------------------------------------------
+#
+# Author:      W. David Ashley
+# Author:      The Programmers' Guild, Inc
+#
+# Description: Makefile for mod_rexx.so using GCC
+#
+# Copyright (C) The Programmers' Guild, Inc. 2020. All Rights Reserved.
+# Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.
+#
+# This software is subject to the terms of the Commom Public License. You
+# must accept the terms of this license to use this software. Refer to
+# the file CPLv1.0.htm included in this package for more information.
+#
+# The program is provided "as is" without any warranty express or implied,
+# including the warranty of non-infringement and the implied warranties of
+# merchantibility and fitness for a particular purpose.
+#
+# Notes:
+#
+# 1. Be sure to read the entire makefile, especially if you are using Regina
+#    Rexx.
+#
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+#
+#  Start user modification section
+#
+#-------------------------------------------------------------------------------
+
+# If you are using a version of Apache that is provided by a Linux
+# Distributor like RedHat, Mandrake, etc you may need to include the following
+# compile options. If Mod_Rexx crashes when processing a request then try
+# recompiling Mod_Rexx with these compile options.
+#SPECPARM = -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+
+# Select the Rexx interpreter you are using.
+ifndef REXXINT
+# Valid settings are REGINA or OORexx.
+REXXINT     = OOREXX
+endif
+
+# ?taf?
+SPECPARM = -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DOOREXX_COMPATIBILITY
+
+# Set the base Rexx path (not used for ooRexx)
+RX_PATH     = /usr/local
+
+#-------------------------------------------------------------------------------
+#
+#  End user modification section
+#
+#-------------------------------------------------------------------------------
+
+ifeq ($(REXXINT),OOREXX)
+# Stuff for Open Object Rexx
+LIBS        = -lrexx -lrexxapi
+INCLUDES    =
+DEFINES     = -DHAVE_RexxWaitForTermination -DOOREXX_COMPATIBILITY
+else
+ifeq ($(REXXINT),REGINA)
+# Stuff for Regina Rexx
+LIBS        = $(RX_PATH)/lib/libregina.so
+INCLUDES    = -I $(RX_PATH)/include
+DEFINES     = -DUSE_REGINA
+else
+# Stuff for Rexx/Trans
+LIBS        = $(RX_PATH)/lib/librexxtrans.so
+INCLUDES    = -I $(RX_PATH)/include
+DEFINES     = -DUSE_REXXTRANS
+endif
+endif
+
+OBJS        = .libs/mod_rexx.o .libs/dirconfig.o .libs/rxfuncs.o .libs/handlers.o
+
+GLFLAGS     = -shared
+
+all         : mod_rexx.so
+
+mod_rexx.so : $(OBJS)
+		$(CC) $(GLFLAGS) -Wl,-soname,$@ -o $@ $(OBJS) $(LIBS) -lc
+
+mod_rexx.o  : mod_rexx.c mod_rexx.h
+#		$(CC) $(GCFLAGS) $(DEFINES) $(INCLUDES) $< -o $@
+		apxs $(DEFINES) -c $<
+
+dirconfig.o : dirconfig.c mod_rexx.h
+#		$(CC) $(GCFLAGS) $(DEFINES) $(INCLUDES) $< -o $@
+		apxs $(DEFINES) -c $<
+
+rxfuncs.o   : rxfuncs.c mod_rexx.h
+#		$(CC) $(GCFLAGS) $(DEFINES) $(INCLUDES) $< -o $@
+		apxs $(DEFINES) -c $<
+
+handlers.o  : handlers.c mod_rexx.h
+#		$(CC) $(GCFLAGS) $(DEFINES) $(INCLUDES) $< -o $@
+		apxs $(DEFINES) -c $<
+
+cleanall    :
+		rm *.o *.lo *.la *.slo
+
+maintainer-clean : cleanall
+		rm *.so

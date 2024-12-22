@@ -1,0 +1,92 @@
+<?rexx
+/*----------------------------------------------------------------------------*/
+/*                                                                            */
+/* Module:      rsptest3.rsp                                                  */
+/*                                                                            */
+/* Author:      Terry Fuller                                                  */
+/* Author:      W. David Ashley                                               */
+/*                                                                            */
+/* Description: Test RSP page. Prints the current month's calendar.           */
+/*                                                                            */
+/* Copyright (C) The Programmers' Guild, Inc. 2021 All Rights Reserved.       */
+/* Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.              */
+/*                                                                            */
+/* This software is subject to the terms of the Commom Public License. You    */
+/* must accept the terms of this license to use this software. Refer to       */
+/* the file CPLv1.0.htm included in this package for more information.        */
+/*                                                                            */
+/* The program is provided "as is" without any warranty express or implied,   */
+/* including the warranty of non-infringement and the implied warranties of   */
+/* merchantibility and fitness for a particular purpose.                      */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+?>
+<html>
+<head>
+<title>Calendar</title>
+</head>
+<body bgcolor="#ffffff">
+<br />
+<center>
+<h1>Calendar</h1>
+</center>
+<hr />
+<br />
+<center>
+
+<?rexx
+sdate = date('S')
+cdate = substr(sdate, 7) + 0
+/* for OS/2 Classic Rexx use the following instead */
+/* month = date('M') || ' - ' || substr(sdate, 1, 4) */
+month = date('M', sdate, 'S') || ' - ' || substr(sdate, 1, 4)
+startday = (date('B', substr(sdate, 1, 6) || '01', 'S') // 7) + 2
+if startday > 7 then startday = startday - 7
+lastsdate = substr(sdate, 1, 6) || '01'
+if substr(lastsdate, 5, 2) = '12' then ,
+ nextdate = (substr(lastsdate, 1, 4) + 1) || '0101'
+else nextsdate = substr(lastsdate, 1, 4) || ,
+ right(substr(lastsdate, 5, 2) + 1, 2, '0') || '01'
+days = date('B', nextsdate, 'S') - date('B', lastsdate, 'S')
+
+/* output the table headers */
+say '<table border="1">'
+say '<tr><td colspan="7" align ="center"><b>'month'</b></td></tr>'
+say '<tr>'
+say '<td align="center" width="30">Sun</td>'
+say '<td align="center" width="30">Mon</td>'
+say '<td align="center" width="30">Tue</td>'
+say '<td align="center" width="30">Wed</td>'
+say '<td align="center" width="30">Thu</td>'
+say '<td align="center" width="30">Fri</td>'
+say '<td align="center" width="30">Sat</td>'
+say '</tr>'
+
+/* output the table contents */
+day = 0
+do i = 1 to 6
+   if day >= days then iterate
+   say '<tr>'
+   do j = 1 to 7
+      say '<td align="right">'
+      if i = 1 then do
+         if j >= startday then day = day + 1
+         end
+      else day = day + 1
+      if day = 0 | day > days then say '&nbsp;'
+      else do
+         if day = cdate then say '<b>'day'</b>'
+         else say day
+         end
+      say '</td>'
+      end
+   say '</tr>'
+   end
+
+/* output the table footer */
+say '</table>'
+?>
+
+</center>
+</body>
+</html>

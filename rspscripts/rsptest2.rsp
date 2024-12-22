@@ -1,0 +1,95 @@
+<?rexx
+/*----------------------------------------------------------------------------*/
+/*                                                                            */
+/* Module:      rsptest2.rsp                                                  */
+/*                                                                            */
+/* Author:      Terry Fuller                                                  */
+/* Author:      W. David Ashley                                               */
+/*                                                                            */
+/* Description: Test RSP page. Rexx calculator.                               */
+/*                                                                            */
+/* Copyright (C) The Programmers' Guild, Inc. 2021. All Rights Reserved.      */
+/* Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.              */
+/*                                                                            */
+/* This software is subject to the terms of the Commom Public License. You    */
+/* must accept the terms of this license to use this software. Refer to       */
+/* the file CPLv1.0.htm included in this package for more information.        */
+/*                                                                            */
+/* The program is provided "as is" without any warranty express or implied,   */
+/* including the warranty of non-infringement and the implied warranties of   */
+/* merchantibility and fitness for a particular purpose.                      */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+signal on syntax name syntax_err
+?>
+<html>
+<head>
+<title>RSP Test Page #2</title>
+</head>
+<body>
+
+<center><h1>RSP Test Page #2</h1></center>
+
+<p>This page acts as a little Rexx calulator. You enter a math expression
+to be solved and Rexx will print the answer.</p>
+
+<?rexx
+parse source os func pgm
+say "<p>prog os is" os"</p>"
+say "<p>prog func is" func"</p>"
+say "<p>prog name is" pgm"</p>" 
+say ""
+exp = ''
+numdigits = 9
+do i = 1 to WWWARGS.0
+   select
+      when WWWARGS.i.!NAME = 'expression' then do
+         exp = WWWARGS.i.!VALUE
+         end
+      when WWWARGS.i.!NAME = 'numdigits' then do
+         numdigits = WWWARGS.i.!VALUE
+         end
+      otherwise nop
+      end
+   end
+if exp <> '' then do
+   numeric digits numdigits
+   interpret 'exp='exp
+   numeric digits
+   end
+?>
+
+<form method="post" action="./rsptest2.rsp">
+<p>Digits of precision
+<select name="numdigits">
+<?rexx
+do i = 9 to 50
+   if numdigits = i then say '<option selected>'i
+   else say '<option>'i
+   end
+?>
+</select>
+<p>Enter a legal Rexx math expression:
+<br /><input type="text" name="expression" size="50" maxlength="150"
+<?rexx
+say 'value="'exp'"'
+?>
+>
+<br />
+<input type="submit">
+</form>
+
+</body>
+</html>
+<?rexx
+syntax_err:
+parse source os func pgm
+say '<pre>'
+say 'Rexx syntax error:'
+say format(sigl, 6) '*-*' sourceline(sigl)
+say 'Error' rc 'running' pgm 'line' sigl': ' errortext(rc)
+say '</pre>'
+say '</body>'
+say '</html>'
+exit 0
+?>

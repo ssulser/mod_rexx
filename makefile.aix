@@ -1,0 +1,89 @@
+#-- Makefile -------------------------------------------------------------------
+#
+# Author:      W. David Ashley
+#
+# Description: Makefile for mod_rexx.so using VisualAge C++ on AIX.
+#
+# Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.
+#
+# This software is subject to the terms of the Commom Public License. You
+# must accept the terms of this license to use this software. Refer to
+# the file CPLv1.0.htm included in this package for more information.
+#
+# The program is provided "as is" without any warranty express or implied,
+# including the warranty of non-infringement and the implied warranties of
+# merchantibility and fitness for a particular purpose.
+#
+# WARNING! wARNING! wARNING! wARNING! wARNING! wARNING! wARNING! wARNING!
+#
+# This makefile has not been tested and probably does NOT work. The APR stuff
+# needs to be added and any changes needed for Apache 2.2.
+#
+# WARNING! wARNING! wARNING! wARNING! wARNING! wARNING! wARNING! wARNING!
+#
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+#
+#  Start user modification section
+#
+#-------------------------------------------------------------------------------
+
+# If you are using a version of Apache that is provided with AIX
+# you may need to include the following compile options.
+# If Mod_Rexx crashes when processing a request then try
+# recompiling Mod_Rexx with these compile options.
+#SPECPARM = -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+
+# Select the Rexx interpreter you are using.
+# Valid settings are OORexx.
+REXXINT     = OOREXX
+
+# Set the base Apache path.
+AP_PATH     = /usr/HTTPServer
+
+# Set the base Rexx path.
+RX_PATH     = /usr/lpp/orexx
+
+#-------------------------------------------------------------------------------
+#
+#  End user modification section
+#
+#-------------------------------------------------------------------------------
+
+# Stuff for Open Object Rexx
+LIBS        = $(RX_PATH)/lib/librexx.so \
+              $(RX_PATH)/lib/librexxapi.so
+INCLUDES    = -I $(AP_PATH)/include \
+              -I $(RX_PATH)/include
+
+CC          = xlC_r
+
+GCFLAGS     = -c -DAIX=52 -qchars=unsigned $(SPECPARM)
+
+GLFLAGS     = -lc -H512 -T512 -bM:SRE -bnoentry -lsvld -bI:$(AP_PATH)/libexec/httpd.exp -bE:mod_rexx.exp
+
+GLBDEP      = mod_rexx.h makefile
+
+OBJS        = mod_rexx.o dirconfig.o rxfuncs.o handlers.o
+
+all         : mod_rexx.so
+
+mod_rexx.so : $(OBJS)
+		$(CC) $(GLFLAGS) $(OBJS) $(LIBS) -o $@
+
+mod_rexx.o  : mod_rexx.c $(GLBDEP)
+		$(CC) $(GCFLAGS) $(INCLUDES) $< -o $@
+
+dirconfig.o : dirconfig.c $(GLBDEP)
+		$(CC) $(GCFLAGS) $(INCLUDES) $< -o $@
+
+rxfuncs.o   : rxfuncs.c $(GLBDEP)
+		$(CC) $(GCFLAGS) $(INCLUDES) $< -o $@
+
+handlers.o  : handlers.c $(GLBDEP)
+		$(CC) $(GCFLAGS) $(INCLUDES) $< -o $@
+
+cleanall    :
+		rm *.o *.so

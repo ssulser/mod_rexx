@@ -1,0 +1,1466 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Rexx Apache External Functions</title>
+</head>
+<body>
+
+<center><h1>Rexx Apache External Functions</h1></center>
+
+<p>The following are the Apache functions available to the Rexx programmer.
+Each of these external functions is automatically available at program startup.
+The Rexx programmer does not have to register them before using them.</p>
+
+<br /><br />
+<h2>Table of Contents</h2>
+<h3>General Functions</h3>
+<a href="#WWWAddCookie">
+WWWAddCookie</a> - Set a new cookie to be returned to the browser
+<br /><a href="#WWWConstruct_URL">
+WWWConstruct_URL</a> - Return a URL from the specified path
+<br /><a href="#WWWEscape_Path">
+WWWEscape_Path</a> - Convert pathmame to a properly escaped URL
+<br /><a href="#WWWGetArgs">
+WWWGetArgs</a> - Get the GET/POST request arguments
+<br /><a href="#WWWGetCookies">
+WWWGetCookies</a> - Get the GET/POST request cookies
+<br /><a href="#WWWGetVersion">
+WWWGetVersion</a> - Get the Mod_Rexx version string
+<br /><a href="#WWWHTTP_time">
+WWWHTTP_time</a> - Return the current RFC 822/1123 time
+<br /><a href="#WWWInternal_Redirect">
+WWWInternal_Redirect</a> - Create a new request from the specified URI
+<br /><a href="#WWWLogError">
+WWWLogError</a> - Log an error message to the Apache log file
+<br /><a href="#WWWLogInfo">
+WWWLogInfo</a> - Log an informational message to the Apache log file
+<br /><a href="#WWWLogWarning">
+WWWLogWarning</a> - Log a warning message to the Apache log file
+<br /><a href="#WWWRun_Sub_Req">
+WWWRun_Sub_Req</a> - Run an Apache subrequest
+<br /><a href="#WWWSendHTTPHeader">
+WWWSendHTTPHeader</a> - Set the MIME content and send the HTTP header
+<br /><a href="#WWWSetHeaderValue">
+WWWSetHeaderValue</a> - Set a new value for an existing cookie
+<br /><a href="#WWWSub_Req_Lookup_File">
+WWWSub_Req_Lookup_File</a> - Run a subrequest on a filename
+<br /><a href="#WWWSub_Req_Lookup_URI">
+WWWSub_Req_Lookup_URI</a> - Run a subrequest on a URI
+
+<br /><br />
+<h3>Apache Request Record Functions</h3>
+<a href="#WWWReqRecConnection">
+WWWReqRecConnection</a> - Return the Connection Record pointer
+<br /><a href="#WWWReqRecNext">
+WWWReqRecNext</a> - Return the next request record pointer
+<br /><a href="#WWWReqRecPrev">
+WWWReqRecPrev</a> - Return the previous request record pointer
+<br /><a href="#WWWReqRecMain">
+WWWReqRecMain</a> - Return the main request record pointer
+<br /><a href="#WWWReqRecIsMain">
+WWWReqRecIsMain</a> - Returns 1 if this is the main request
+<br /><a href="#WWWReqRecThe_request">
+WWWReqRecThe_request</a> - Return the request
+<br /><a href="#WWWReqRecProxyreq">
+WWWReqRecProxyreq</a> - Returns 1 if this is a proxy request
+<br /><a href="#WWWReqRecServer">
+WWWReqRecServer</a> - Return the Server Record pointer
+<br /><a href="#WWWReqRecHeader_only">
+WWWReqRecHeader_only</a> - Always returns 0
+<br /><a href="#WWWReqRecProtocol">
+WWWReqRecProtocol</a> - Returns the request HTTP protocol
+<br /><a href="#WWWReqRecStatus_line">
+WWWReqRecStatus_line</a> - Returns/sets the status line field
+<br /><a href="#WWWReqRecStatus">
+WWWReqRecStatus</a> - Returns/sets the status field
+<br /><a href="#WWWReqRecMethod">
+WWWReqRecMethod</a> - Returns/sets the method field
+<br /><a href="#WWWReqRecMethod_number">
+WWWReqRecMethod_number</a> - Returns/sets the method number field
+<br /><a href="#WWWReqRecAllowed">
+WWWReqRecAllowed</a> - Returns/sets the allowed field
+<br /><a href="#WWWReqRecBytes_sent">
+WWWReqRecBytes_sent</a> - Returns the bytes sent field
+<br /><a href="#WWWReqRecHeader_in">
+WWWReqRecHeader_in</a> - Returns/sets values in the bytes headers in field
+<br /><a href="#WWWReqRecHeader_out">
+WWWReqRecHeader_out</a> - Returns/sets values in the bytes headers out field
+<br /><a href="#WWWReqRecErr_header_out">
+WWWReqRecErr_header_out</a> - Returns/sets values in the bytes error headers out field
+<br /><a href="#WWWReqRecSubprocess_env">
+WWWReqRecSubprocess_env</a> - Returns/sets values in the subprocess environment
+<br /><a href="#WWWReqRecNotes">
+WWWReqRecNotes</a> - Returns/sets values in the notes
+<br /><a href="#WWWReqRecContent_type">
+WWWReqRecContent_type</a> - Returns/sets the content type field
+<br /><a href="#WWWReqRecContent_encoding">
+WWWReqRecContent_encoding</a> - Returns/sets the content encoding field
+<br /><a href="#WWWReqRecHandler">
+WWWReqRecHandler</a> - Returns/sets the handler field
+<br /><a href="#WWWReqRecContent_languages">
+WWWReqRecContent_languages</a> - Returns/sets the content languages field
+<br /><a href="#WWWReqRecNo_cache">
+WWWReqRecNo_cache</a> - Returns/sets the no_cache field
+<br /><a href="#WWWReqRecUri">
+WWWReqRecUri</a> - Returns/sets the URI field
+<br /><a href="#WWWReqRecFilename">
+WWWReqRecFilename</a> - Returns/sets the filename field
+<br /><a href="#WWWReqRecPath_info">
+WWWReqRecPath_info</a> - Returns/sets the path_info field
+<br /><a href="#WWWReqRecArgs">
+WWWReqRecArgs</a> - Returns the args field
+<br /><a href="#WWWReqRecFinfo_stmode">
+WWWReqRecFinfo_stmode</a> - Returns the finfo stmode field
+<br /><a href="#WWWReqRecUser">
+WWWReqRecUsern</a> - Return the user login name
+<br /><a href="#WWWReqRecAuth_type">
+WWWReqRecAuth_type</a> - Return the authentication type
+
+<br /><br />
+<h3>Apache Server Record Functions</h3>
+<a href="#WWWSrvRecServer_admin">
+WWWSrvRecServer_admin</a> - Returns the server admin email address
+<br /><a href="#WWWSrvRecServer_hostname">
+WWWSrvRecServer_hostname</a> - Returns the server hostname
+<br /><a href="#WWWSrvRecPort">
+WWWSrvRecPort</a> - Returns the server listening port
+<br /><a href="#WWWSrvRecIs_virtual">
+WWWSrvRecIs_virtual</a> - Returns non-zero if this is a virtual server
+
+<br /><br />
+<h3>Apache Connection Record Functions</h3>
+<br /><a href="#WWWCnxRecAborted">
+WWWCnxRecAborted</a> - Return 0 if a timeout occured
+
+<br /><br /><br /><br /><br />
+<h1>General Functions</h1>
+
+<br /><br />
+<h2><a name="WWWAddCookie">WWWAddCookie</a></h2>
+<p>Sets a new value for an existing cookie in the returned HTTP request header.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWAddCookie(r, cookie_value);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>cookie_value</b></dt>
+   <dd>The value of the cookie. No check is performed on the validity of the
+       cookie value. This function should be called prior to the SendHTTPHeader
+       function.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWConstruct_URL">WWWConstruct_URL</a></h2>
+<p>Construct  a fully qualified URL from the path specified.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+URL = WWWConstruct_URL(r, path);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>URL</b></dt>
+   <dd>The <i>path</i> cnverted to a fully qualified URL based on the current request
+       record (r).</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>path</b></dt>
+   <dd>The filesystem pathname.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWEscape_Path">WWWEscape_Path</a></h2>
+<p>Takes a filesystem pathname and converts it into a properly escaped URI.
+If the partial flag is 0 then the function will a (/) to the beginning of the URI,
+otherwise a (/) will not be added.</p>
+<p>This function does NOT convert spaces to (+) signs. This action should be performed
+after a call to this function.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+escURI = WWWEscape_Path(r, path, partial);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>escURI</b></dt>
+   <dd>The <i>path</i> cnverted to a properly escaped URL.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>path</b></dt>
+   <dd>The filesystem pathname.</dd>
+   <dt><b>partial</b></dt>
+   <dd>If the <i>partial</i> flage is 0 then a (/) will be added to the beginning of the
+       returned <i>escURL</i> unless the <i>path</i> already begins with a slash(/).
+       Otherwise a (/) will not be added.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWGetArgs">WWWGetArgs</a></h2>
+<p>Returns the GET/POST request arguments.</p>
+<p>Note: This function is NOT optional and must appear in your Rexx script.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWGetArgs r
+/* WWWARGS.0 now contains the number of arguments */
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+<h3>Example</h3>
+<p>The GET query string arguments or the passed POST arguments can be accessed
+using the following example. The name/value pairs are stored in a Rexx stem array.</p>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWGetArgs r
+say 'The number of arguments is' wwwargs.0'.'
+do i = 1 to wwwargs.0
+   say 'WWWARGS.'i'.!NAME =' wwwargs.i.!name
+   say 'WWWARGS.'i'.!VALUE =' wwwargs.i.!value
+end
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Notes</h3>
+<p>Calling WWWGetArgs more than one time per Apache request can cause major problems
+including catastrophic errors with the Apache server. ONLY CALL WWWGETARGS ONE TIME
+PER APACHE REQUEST!</p>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWGetCookies">WWWGetCookies</a></h2>
+<p>Returns the cookies passed from the browser.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWGetCookies r
+/* WWWCOOKIES.0 contains the number of cookies */
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+<h3>Example</h3>
+<p>The cookies can be accessed
+using the following example. The name/value pairs are stored in a Rexx stem array.</p>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWGetCookies r
+say 'The number of cookies is' wwwcookies.0'.'
+do i = 1 to wwwcookies.0
+   say 'WWWCOOKIES.'i'.!NAME =' wwwcookies.i.!name
+   say 'WWWCOOKIES.'i'.!VALUE =' wwwcookies.i.!value
+end
+</pre>
+</td></tr>
+</table>
+</center>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWGetVersion">WWWGetVersion</a></h2>
+<p>Returns the Mod_Rexx module version string.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+version = WWWGetVersion();
+/* version = "Mod_Rexx/1.01 Jun 06 2001 09:23:11" */
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<p>None.</p>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWHTTP_time">WWWHTTP_time</a></h2>
+<p>Returns the time/date formatted per RFC 822 and 1123.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+timestamp = WWWHTTP_time(r);
+/* timestamp = "Tue 15 Sep 1998 14:36:31 GMT" */
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWInternal_Redirect">WWWInternal_Redirect</a></h2>
+<p>Creates a new request from the indicated URI and then runs it.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWInternal_Redirect r, uri,
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>uri</b></dt>
+   <dd>The URI to use in creating the subrequest.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWLogError">WWWLogError</a></h2>
+<p>Places an error level message in the server's error log.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWLogError r, message
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>message</b></dt>
+   <dd>The message to be placed in the error log.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWLogInfo">WWWLogInfo</a></h2>
+<p>Places an informational level message in the server's error log.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWLogInfo r, message
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>message</b></dt>
+   <dd>The message to be placed in the error log.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWLogWarning">WWWLogWarning</a></h2>
+<p>Places a warning level message in the server's error log.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWLogWarning r, message
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>message</b></dt>
+   <dd>The message to be placed in the error log.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWRun_Sub_Req">WWWRun_Sub_Req</a></h2>
+<p>Returns the return code from running the handlers for a subrequest.</p>
+<p><b>Warning!!!</b> During subrequest processing <b>none</b> of the Rexx handlers
+will be invoked. They will always DECLINE the request.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWRun_Sub_Req(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The return code from the subrequest.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache subrequest handle.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWSendHTTPHeader">WWWSendHTTPHeader</a></h2>
+<p>Sets the mime content-type and then sends the headers to the browser.</p>
+<p>Note: This function is NOT optional and must appear in your Rexx script.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+return_code = WWWSendHTTPHeader(r, type);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>return_code</b></dt>
+   <dd>The return code from the Apache function</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>type</b></dt>
+   <dd>The content-type. Usually this will be the string "text/html"</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWSetHeaderValue">WWWSetHeaderValue</a></h2>
+<p>Sets a new value for an existing cookie in the returned HTTP request header.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+call WWWSetHeaderValue(r, key, value);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>key</b></dt>
+   <dd>The header key to be replaced.</dd>
+   <dt><b>value</b></dt>
+   <dd>The value to be applied to the header key.
+       This function should be called prior to the SendHTTPHeader function.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWSub_Req_Lookup_File">WWWSub_Req_Lookup_File</a></h2>
+<p>Returns the resulting request record pointer from a subrequest from the given
+filename.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+subrec = WWWSub_Req_Lookup_File(file, r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>subreq</b></dt>
+   <dd>The subrequest record pointer</dd>
+   <dt><b>file</b></dt>
+   <dd>The filename to use in creating the subrequest.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWSub_Req_Lookup_URI">WWWSub_Req_Lookup_URI</a></h2>
+<p>Returns the resulting request record pointer from a subrequest from the given URI.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+subrec = WWWSub_Req_Lookup_URI(uri, r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters</h3>
+<dl>
+   <dt><b>subreq</b></dt>
+   <dd>The subrequest record pointer</dd>
+   <dt><b>uri</b></dt>
+   <dd>The URI to use in creating the subrequest.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h1>Apache Request Record Functions</h1>
+
+<br /><br />
+<h2><a name="WWWReqRecConnection">WWWReqRecConnection</a></h2>
+<p>Returns the Connection Record Pointer.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+connxrecptr = WWWReqRecConnection(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>connxrecptr</b></dt>
+   <dd>The Connection Record pointer.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecServer">WWWReqRecServer</a></h2>
+<p>Returns the Server Record Pointer.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+srvrrecptr = WWWReqRecServer(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>srvrrecptr</b></dt>
+   <dd>The Server Record pointer.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecNext">WWWReqRecNext</a></h2>
+<p>Returns a Request Record Pointer. This is used during subrequest processing</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+reqrecptr = WWWReqRecNext(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>reqrecptr</b></dt>
+   <dd>The next Request Record pointer.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecPrev">WWWReqRecPrev</a></h2>
+<p>Returns a Request Record Pointer. This is used during subrequest processing</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+reqrecptr = WWWReqRecPrev(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>reqrecptr</b></dt>
+   <dd>The previous Request Record pointer.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecMain">WWWReqRecMain</a></h2>
+<p>Returns a Request Record Pointer. This is used during subrequest processing</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+reqrecptr = WWWReqRecMain(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>reqrecptr</b></dt>
+   <dd>The main Request Record pointer.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecIsMain">WWWReqRecIsMain</a></h2>
+<p>Returns 1 if this is the main Request Record, otherwise returns 0.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecIsMain(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>1 if this is the main request, otherwise 0.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecThe_request">WWWReqRecThe_request</a></h2>
+<p>Returns a copy of the request.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecThe_request(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The request.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecProxyreq">WWWReqRecProxyreq</a></h2>
+<p>Returns 1 if this is a proxy request, otherwise returns 0.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecProxyreq(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>1 if this is a proxy request, otherwise 0.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecHeader_only">WWWReqRecHeader_only</a></h2>
+<p>Always returns 0 because Mod_Rexx processes header only requests.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecHeader_only(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>Always 0.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecProtocol">WWWReqRecProtocol</a></h2>
+<p>Returns a copy of the protocol string.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecProtocol(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>Protocol string (like "HTTP/1.0").</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecStatus_line">WWWReqRecStatus_line</a></h2>
+<p>Returns/sets the status line returned to the browser.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecStatus_line(r [, newstatusline]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The status line.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newstatusline</b></dt>
+   <dd>The new string to be assigned to the status line field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecStatus">WWWReqRecStatus</a></h2>
+<p>Returns/sets the status.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecStatus(r [, newstatus]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The status.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newstatus</b></dt>
+   <dd>The new numeric value to be assigned to the status field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecMethod">WWWReqRecMethod</a></h2>
+<p>Returns/sets the method.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecMethod(r [, newmethod]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The method string.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newmethod</b></dt>
+   <dd>The new string to be assigned to the method ("GET", "POST", etc) field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecMethod_number">WWWReqRecMethod_number</a></h2>
+<p>Returns/sets the method number.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecMethod_number(r [, newmethodnum]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The method number.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newmethodnum</b></dt>
+   <dd>The new numeric value to be assigned to the method number field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecAllowed">WWWReqRecAllowed</a></h2>
+<p>Returns/sets the allowed methods for the handler.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecAllowed(r [, newallowednum]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The allowed number (bit field).</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newallowednum</b></dt>
+   <dd>The new numeric value to be assigned to the allowed field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecBytes_sent">WWWReqRecBytes_sent</a></h2>
+<p>Returns the number of document body bytes sent to the browser so far.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecBytes_sent(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The number of bytes sent so far.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecHeader_in">WWWReqRecHeader_in</a></h2>
+<p>Returns/sets incoming HTTP headers.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecHeader_in(r, key [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the header field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>key</b></dt>
+   <dd>The name of the header field to return/set.</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the header key name.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecHeader_out">WWWReqRecHeader_out</a></h2>
+<p>Sets outgoing HTTP headers.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecHeader_out(r, key, value);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the header field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>key</b></dt>
+   <dd>The name of the header field to set.</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value assigned to the header key name.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecErr_header_out">WWWReqRecErr_header_out</a></h2>
+<p>Returns/sets outgoing error HTTP headers.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecErr_header_out(r, key [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the header field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>key</b></dt>
+   <dd>The name of the header field to return/set.</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the header key name.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecSubprocess_env">WWWReqRecSubprocess_env</a></h2>
+<p>Returns/sets subprocess environment variables.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecSubprocess_env(r, key [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the environment field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>key</b></dt>
+   <dd>The name of the environment variable to return/set.</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the environment variable.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecNotes">WWWReqRecNotes</a></h2>
+<p>Returns/sets process notes variables.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecNotes(r, key [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the notes field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>key</b></dt>
+   <dd>The name of the notes variable to return/set.</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the notes variable.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecContent_type">WWWReqRecContent_type</a></h2>
+<p>Returns/sets the MIME content type.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecContent_type(r [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the content type field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the content type field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecContent_encoding">WWWReqRecContent_encoding</a></h2>
+<p>Returns/sets the content encoding.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecContent_type(r [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the content encoding field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the content encoding field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecHandler">WWWReqRecHandler</a></h2>
+<p>Returns/sets the handler.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecHandler(r [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the handler field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the handler field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecContent_languages">WWWReqRecContent_languages</a></h2>
+<p>Returns/sets the content languages field.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecContent_languages(r [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the content languages field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the content languages field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecNo_cache">WWWReqRecNo_cache</a></h2>
+<p>Returns/sets the value of the no_cache field.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecNo_cache(r [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the no_cache field (0 or 1).</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value (0 or 1) to assign to the no_cache field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecUri">WWWReqRecUri</a></h2>
+<p>Returns/sets the request URI field.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecUri(r [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the URI field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the URI field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecFilename">WWWReqRecFilename</a></h2>
+<p>Returns/sets the request filename field.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecFilename(r [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the filename field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the filename field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecPath_info">WWWReqRecPath_info</a></h2>
+<p>Returns/sets the request path_info field.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecPath_info(r [, newvalue]);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the path_info field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+   <dt><b>newvalue</b></dt>
+   <dd>The new value to assign to the path_info field.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecArgs">WWWReqRecArgs</a></h2>
+<p>Returns the request args field.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecArgs(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the args field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecFinfo_stmode">WWWReqRecFinfo_stmode</a></h2>
+<p>Returns the request stat finfo field as a string of 1's and 0's.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecFinfo_stmode(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The value of the stat finfo field.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br />
+<h2><a name="WWWReqRecUser">WWWReqRecUser</a></h2>
+<p>Returns the user's login name.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecUser(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The user's login name.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWReqRecAuth_type">WWWReqRecAuth_type</a></h2>
+<p>Returns the authentication method (if used).</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWReqRecAuth_type(r);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The authentication method.</dd>
+   <dt><b>r</b></dt>
+   <dd>The Apache request handle. This is passed to the Rexx program as arg(1).</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h1>Apache Server Record Functions</h1>
+
+<br /><br />
+<h2><a name="WWWSrvRecServer_admin">WWWSrvRecServer_admin</a></h2>
+<p>Returns the email address of the server administrator.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWSrvRecServer_admin(s);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The server administrator email address.</dd>
+   <dt><b>s</b></dt>
+   <dd>The Apache server pointer.
+    You can get this value from the WWWReqRecServer Rexx external function.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWSrvRecServer_hostname">WWWSrvRecServer_hostname</a></h2>
+<p>Returns the server's hostname.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWSrvRecServer_hostname(s);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The server's hostname.</dd>
+   <dt><b>s</b></dt>
+   <dd>The Apache server pointer.
+    You can get this value from the WWWReqRecServer Rexx external function.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWSrvRecPort">WWWSrvRecPort</a></h2>
+<p>Returns the server's listening port.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWSrvRecPort(s);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The server's listening port.</dd>
+   <dt><b>s</b></dt>
+   <dd>The Apache server pointer.
+    You can get this value from the WWWReqRecServer Rexx external function.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWSrvRecIs_virtual">WWWSrvRecIs_virtual</a></h2>
+<p>Returns 0 if this is a virtual server.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWSrvRecIs_virtual(s);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>Returns 0 if this is a virtual server, otherwise returns non-zero value.</dd>
+   <dt><b>s</b></dt>
+   <dd>The Apache server pointer.
+    You can get this value from the WWWReqRecServer Rexx external function.</dd>
+</dl>
+
+<br /><br /><br /><br /><br />
+<h1>Apache Connection Record Functions</h1>
+
+<br /><br /><br /><br /><br />
+<h2><a name="WWWCnxRecAborted">WWWCnxRecAborted</a></h2>
+<p>Returns 1 if a timeout has occured, otherwise returns 0.</p>
+<h3>Rexx Function Prototype</h3>
+<br />
+<center>
+<table border="1" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="top" bgcolor="#e6e6e6">
+<pre>
+retc = WWWCnxRecAborted(c);
+</pre>
+</td></tr>
+</table>
+</center>
+<h3>Function Parameters and Return Values</h3>
+<dl>
+   <dt><b>retc</b></dt>
+   <dd>The timeout indicator.</dd>
+   <dt><b>c</b></dt>
+   <dd>The Apache connection pointer.
+    You can get this value from the WWWReqRecConnection Rexx external function.</dd>
+</dl>
+
+<br />
+<table border="0" cellpadding="4" cellspacing="0" width="90%">
+<tr><td valign="middle">
+  <a href="http://validator.w3.org/check/referer">
+  <img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!"
+       height="31" width="88" />
+  </a>
+</td>
+<td valign="middle">
+   Copyright &copy; The Programmers&apos; Guild, Inc. 2021. All Rights Reserved.
+</td>
+<td valign="middle">
+   Copyright &copy; W. David Ashley 2004. All Rights Reserved.
+</td></tr>
+</table>
+
+</body>
+</html>

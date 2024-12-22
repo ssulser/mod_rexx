@@ -1,0 +1,72 @@
+The following is the list of changes for Mod_Rexx.
+
+Changes for version 2.4.0
+=========================
+
+1. Support for Apache 2.4 64-bit addressing.
+
+2. This release has NOT been tested with Regina Rexx.
+
+
+Changes for version 2.2.0
+=========================
+
+1. Support for Apache 2.2.
+
+2. Fixup for new APR functions and libraries used in Apache 2.2.
+
+3. All support for OS/2 has been removed.
+
+4. This release has NOT been tested with Regina Rexx.
+
+5. Fix the check for Content-Type so that it does not seg fault.
+
+
+Changes for version 2.1.1
+=========================
+
+1. Fixed some minor bugs in some external function which tested for the
+   number of arguments incorrectly.
+
+2. Updated copyright statement on all source files to include 2005.
+
+3. Updated makefiles for Open Object Rexx and eliminated IBM Object Rexx.
+
+
+Changes for version 2.1.0
+=========================
+
+1. Fixed the problem of the wrong request record pointer being used in a
+   multi-threaded environment. I removed the pointer from the user exit
+   userarea which is common to all threads and created a table to hold the
+   thread ID and the request record pointer. There is always a one-to-one
+   relationship between the thread ID and the request record pointer so it
+   makes obtaining the correct request record pointer easy for all the Rexx
+   exits.
+
+   The only exception to this coorespondence is when an Object Rexx program
+   does IO from an early REPLY method. Since Mod_Rexx is not notified of the
+   thread ID of this new thread it will have no entry in the table for the
+   thread ID and thus no request record pointer entry. Therefore you can not
+   perform HTML page output from early REPLY methods in Object Rexx.
+
+2. Removed the uppercase option argument from the WWWGetArgs function. This
+   was confusing to some Rexx programmers. HTML form variables will now be
+   used as they appear on the HTML page.
+
+3. Apache 1.3 support has been removed from Mod_Rexx. You should upgrade to
+   Apache 2.0.
+
+4. OS/2 is now unsupported by Mod_Rexx. All the OS/2 support code still exists
+   in Mod_Rexx but do not expect any support from the Mod_Rexx team. You are
+   on your own.
+
+5. The autoconf files have been removed from this release of Mod_Rexx. Full
+   support for autoconf will be added in a future release.
+
+
+Changes for version 2.0.0
+=========================
+
+1. Original release for Apache 2.0.
+
