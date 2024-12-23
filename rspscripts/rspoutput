@@ -1,0 +1,188 @@
+/* Start of Rexx RSP header information */
+/*
+
+RSP Compiler Information:
+   Compiler version:  v2.4.0
+   Compile timestamp: 23 Dec 2024 00:01:58
+   Operating System:  OS
+   Rexx Version:      REXX-REGINA_3.9.6 5.00 29 APR 2024
+
+Source RSP File Information:
+   2024-12-22 22:13:58        2880  /home/ssulser/Downloads/rspscripts/rsptest1.rsp
+
+Output Rexx Program File Information:
+   Filename: /home/ssulser/Downloads/rspscripts/rspoutput
+
+*/
+
+/* note: the following call is NOT optional */
+call WWWSendHTTPHeader arg(1), "text/html"
+/* note: these calls are optional but here anyway */
+call WWWGetArgs arg(1)
+call WWWGetCookies arg(1)
+
+/* End of Rexx RSP header information */
+
+/*----------------------------------------------------------------------------*/
+/*                                                                            */
+/* Module:      rsptest1.rsp                                                  */
+/*                                                                            */
+/* Author:      Terry Fuller                                                  */
+/* Author:      W. David Ashley                                               */
+/*                                                                            */
+/* Description: Test RSP page. Simple RSP test page.                          */
+/*                                                                            */
+/* Copyright (C) The Programmers' Guild, Inc. 2021. All Rights Reserved.      */
+/* Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.              */
+/*                                                                            */
+/* This software is subject to the terms of the Commom Public License. You    */
+/* must accept the terms of this license to use this software. Refer to       */
+/* the file CPLv1.0.htm included in this package for more information.        */
+/*                                                                            */
+/* The program is provided "as is" without any warranty express or implied,   */
+/* including the warranty of non-infringement and the implied warranties of   */
+/* merchantibility and fitness for a particular purpose.                      */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+say '<html>'
+say '<head>'
+say '<title>RSP Test Page #1</title>'
+say '</head>'
+say '<body>'
+say ''
+say '<center><h1>RSP Test Page #1</h1></center>'
+say ''
+say '<p>This is some straight HTML text in the RSP file.</p>'
+say ''
+say '<p>The following time stamp is produced by Rexx using the short tag form.</p>'
+say '<pre>'
+say date() time()
+say '</pre>'
+say ''
+say '<p>This is more straight HTML text in the RSP file.</p>'
+say ''
+say '<p>The following time stamp is produced by Rexx using the long form'
+say 'of the SCRIPT tag.</p>'
+say '<pre>'
+say date() time()
+say '</pre>'
+say ''
+say '<p>The following time stamp is produced by Rexx using the long depricated form'
+say 'of the SCRIPT tag.</p>'
+say '<pre>'
+say date() time()
+say '</pre>'
+say ''
+say '<p>This is more straight HTML text in the RSP file.</p>'
+say ''
+say '<p>This is a really long HTML line to see if the code for splitting HTML lines in'
+say ' an RSP file is being done correctly. Look at the browser HTML source to see if the'
+say ' line has been split.</p>'
+say ''
+say '<p>The following displays some lines from the module commentary:'
+  hdrl=25
+  say "<pre>"
+  loop i=hdrl+5 to hdrl+11
+  say sourceline(i)
+  end
+  say "</pre>"
+say ''
+say '</body>'
+say '</html>'
+/* Start of Rexx RSP footer information */
+return 0
+/* End of Rexx RSP footer information */
+/* Start of Rexx RSP header information */
+/*
+
+RSP Compiler Information:
+   Compiler version:  v2.4.0
+   Compile timestamp: 23 Dec 2024 00:05:12
+   Operating System:  OS
+   Rexx Version:      REXX-REGINA_3.9.6 5.00 29 APR 2024
+
+Source RSP File Information:
+   2024-12-22 22:13:58        2880  /home/ssulser/Downloads/rspscripts/rsptest1.rsp
+
+Output Rexx Program File Information:
+   Filename: /home/ssulser/Downloads/rspscripts/rspoutput
+
+*/
+
+/* note: the following call is NOT optional */
+call WWWSendHTTPHeader arg(1), "text/html"
+/* note: these calls are optional but here anyway */
+call WWWGetArgs arg(1)
+call WWWGetCookies arg(1)
+
+/* End of Rexx RSP header information */
+
+/*----------------------------------------------------------------------------*/
+/*                                                                            */
+/* Module:      rsptest1.rsp                                                  */
+/*                                                                            */
+/* Author:      Terry Fuller                                                  */
+/* Author:      W. David Ashley                                               */
+/*                                                                            */
+/* Description: Test RSP page. Simple RSP test page.                          */
+/*                                                                            */
+/* Copyright (C) The Programmers' Guild, Inc. 2021. All Rights Reserved.      */
+/* Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.              */
+/*                                                                            */
+/* This software is subject to the terms of the Commom Public License. You    */
+/* must accept the terms of this license to use this software. Refer to       */
+/* the file CPLv1.0.htm included in this package for more information.        */
+/*                                                                            */
+/* The program is provided "as is" without any warranty express or implied,   */
+/* including the warranty of non-infringement and the implied warranties of   */
+/* merchantibility and fitness for a particular purpose.                      */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+say '<html>'
+say '<head>'
+say '<title>RSP Test Page #1</title>'
+say '</head>'
+say '<body>'
+say ''
+say '<center><h1>RSP Test Page #1</h1></center>'
+say ''
+say '<p>This is some straight HTML text in the RSP file.</p>'
+say ''
+say '<p>The following time stamp is produced by Rexx using the short tag form.</p>'
+say '<pre>'
+say date() time()
+say '</pre>'
+say ''
+say '<p>This is more straight HTML text in the RSP file.</p>'
+say ''
+say '<p>The following time stamp is produced by Rexx using the long form'
+say 'of the SCRIPT tag.</p>'
+say '<pre>'
+say date() time()
+say '</pre>'
+say ''
+say '<p>The following time stamp is produced by Rexx using the long depricated form'
+say 'of the SCRIPT tag.</p>'
+say '<pre>'
+say date() time()
+say '</pre>'
+say ''
+say '<p>This is more straight HTML text in the RSP file.</p>'
+say ''
+say '<p>This is a really long HTML line to see if the code for splitting HTML lines in'
+say ' an RSP file is being done correctly. Look at the browser HTML source to see if the'
+say ' line has been split.</p>'
+say ''
+say '<p>The following displays some lines from the module commentary:'
+  hdrl=25
+  say "<pre>"
+  loop i=hdrl+5 to hdrl+11
+  say sourceline(i)
+  end
+  say "</pre>"
+say ''
+say '</body>'
+say '</html>'
+/* Start of Rexx RSP footer information */
+return 0
+/* End of Rexx RSP footer information */

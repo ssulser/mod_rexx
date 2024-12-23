@@ -1,23 +1,23 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
- *                                                                            
- * Module:      rspcomp.rex                                                   
- *                                                                            
- * Author:      Terry Fuller                                                  
- * Author:      W. David Ashley                                               
- *                                                                            
- * Description: Compile an *.rsp (Rexx Server Page) into a real Rexx pgm.     
- *                                                                            
- * Copyright (C) The Programmers' Guild, Inc. 2021-2022. All Rights Reserved      
- * Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.              
- *                                                                            
- * This software is subject to the terms of the Commom Public License. You    
- * must accept the terms of this license to use this software. Refer to       
- * the file CPLv1.0.htm included in this package for more information.        
- *                                                                            
- * The program is provided "as is" without any warranty express or implied,   
- * including the warranty of non-infringement and the implied warranties of   
- * merchantibility and fitness for a particular purpose.                      
- *                                                                            
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ *
+ * Module:      rspcomp.rex
+ *
+ * Author:      Terry Fuller
+ * Author:      W. David Ashley
+ *
+ * Description: Compile an *.rsp (Rexx Server Page) into a real Rexx pgm.
+ *
+ * Copyright (C) The Programmers' Guild, Inc. 2021-2022. All Rights Reserved
+ * Copyright (C) W. David Ashley 2004-2007. All Rights Reserved.
+ *
+ * This software is subject to the terms of the Commom Public License. You
+ * must accept the terms of this license to use this software. Refer to
+ * the file CPLv1.0.htm included in this package for more information.
+ *
+ * The program is provided "as is" without any warranty express or implied,
+ * including the warranty of non-infringement and the implied warranties of
+ * merchantibility and fitness for a particular purpose.
+ *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
 
@@ -61,10 +61,8 @@
 script_version = 'v2.4.0'
 
 /* set global variables and option defaults */
-errmsg = 0
+errmsg = 1
 parse upper version rexx_ver
-if pos('OOREXX',rexx_ver)>0 then ooRexx=.true -- ooRexx interpreter being used...
-else ooRexx=.false
 
 /* get the input filename arguments and options */
 cmdline = arg(1)
@@ -90,38 +88,20 @@ if rspfilename = '' then do
    end
 
 /* use .stream object to avoid case-insensitive file name performance issue -- taf 2021/02/12 */
-if ooRexx then -- ooRexx interpreter being used...
-  do
-  istrm=.stream~new(rspfilename)
-  retc=istrm~open('read')
-  if retc <> 'READY:' then 
-     do
-     call console_msg 'Error: cannot open file' rspfilename
-     return 3
-     end
-  ostrm=.stream~new(rexfilename)
-  retc=ostrm~open('write replace')
-  if retc <> 'READY:' then do
-     call console_msg 'Error: cannot open file' rexfilename
-     return 4
-     end
-  end
-else 
-  do
+
   retc = stream(rspfilename, 'c', 'open read')
-  if retc <> 'READY:' then 
+  if retc <> 'READY:' then
      do
      call console_msg 'Error: cannot open file' rspfilename
      return 3
      end
+
   retc = stream(rexfilename, 'c', 'open write')
   if retc <> 'READY:' then
     do
     call console_msg 'Error: cannot open file' rexfilename
     return 4
     end
-  end
-  
 
 /* read in the rsp file and look for the the rsp tags */
 state = 0 /* initial state is to output HTML lines */
@@ -137,16 +117,8 @@ line = iput(rspfilename)
   end
 
 /* close the files */
-if ooRexx then -- dodge performance issue with case insensitive filesystems...
-  do
-  istrm~close
-  ostrm~close
-  end
-else 
-  do
   call stream rspfilename, 'c', 'close'
   call stream rexfilename, 'c', 'close'
-  end
 
 /* done */
 return 0
@@ -165,7 +137,7 @@ return eof
 /* process a line from the rsp file                                           */
 /*----------------------------------------------------------------------------*/
 
-process_line: procedure expose state rexfilename oorexx ostrm istrm
+process_line: procedure expose state rexfilename
 line = arg(1)
 uline = translate(strip(line))
 select
@@ -229,7 +201,7 @@ return
 /* (so Rexx maximum program line length is not exceeded)                      */
 /*----------------------------------------------------------------------------*/
 
-splitline: procedure expose rexfilename oorexx oorexx ostrm istrm
+splitline: procedure expose rexfilename
 line = arg(1)
 do while length(line) > 90
    x = substr(line, 1, 80)
@@ -320,15 +292,13 @@ console_msg:
 if errmsg = 1 then say arg(1)
 return
 
-/* routine to cope with stream v .stream output */  
-oput: procedure expose ostrm ooRexx
-use arg fn, line
-if ooRexx then ostrm~lineout(line)
-else call lineout rspfilename,line
+/* routine to cope with stream v .stream output */
+oput: procedure
+parse arg fn, line
+call lineout fn,line
 return result
 
-/* routine to cope with stream v .stream input */  
-iput: procedure expose istrm ooRexx eof
-use arg fn
-if ooRexx then return istrm~linein 
-else return linein(fn)
+/* routine to cope with stream v .stream input */
+iput: procedure expose eof
+parse arg fn
+return linein(fn)
