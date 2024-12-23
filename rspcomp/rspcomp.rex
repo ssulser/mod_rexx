@@ -61,20 +61,18 @@
 script_version = 'v2.4.0'
 
 /* set global variables and option defaults */
-errmsg = 1
+errmsg = 0
 parse upper version rexx_ver
 
 /* get the input filename arguments and options */
 cmdline = arg(1)
-if substr(cmdline, 1, 1) = '"' then ,
- parse var cmdline '"' rspfilename '"' cmdline
-else ,
- parse var cmdline rspfilename cmdline
+if substr(cmdline, 1, 1) = '"'
+  then parse var cmdline '"' rspfilename '"' cmdline
+  else parse var cmdline rspfilename cmdline
 cmdline = strip(cmdline)
-if substr(cmdline, 1, 1) = '"' then ,
- parse var cmdline '"' rexfilename '"' option1 .
-else ,
- parse var cmdline rexfilename option1 .
+if substr(cmdline, 1, 1) = '"'
+  then parse var cmdline '"' rexfilename '"' option1 .
+  else parse var cmdline rexfilename option1 .
 if rexfilename = '' then do
    call console_msg 'Error: No output Rexx filename specified.'
    return 1
@@ -294,7 +292,7 @@ return
 
 /* routine to cope with stream v .stream output */
 oput: procedure
-parse arg fn, line
+parse arg fn,line
 call lineout fn,line
 return result
 

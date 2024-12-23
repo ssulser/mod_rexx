@@ -64,7 +64,7 @@ say date() time()
 <?rexx
   hdrl=25
   say "<pre>"
-  loop i=hdrl+5 to hdrl+11
+  do i=hdrl+5 to hdrl+11
   say sourceline(i)
   end
   say "</pre>"
