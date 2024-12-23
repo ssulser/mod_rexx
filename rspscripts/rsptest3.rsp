@@ -37,17 +37,15 @@
 <?rexx
 sdate = date('S')
 cdate = substr(sdate, 7) + 0
-/* for OS/2 Classic Rexx use the following instead */
-/* month = date('M') || ' - ' || substr(sdate, 1, 4) */
 month = date('M', sdate, 'S') || ' - ' || substr(sdate, 1, 4)
 startday = (date('B', substr(sdate, 1, 6) || '01', 'S') // 7) + 2
 if startday > 7 then startday = startday - 7
 lastsdate = substr(sdate, 1, 6) || '01'
-if substr(lastsdate, 5, 2) = '12' then ,
- nextdate = (substr(lastsdate, 1, 4) + 1) || '0101'
-else nextsdate = substr(lastsdate, 1, 4) || ,
- right(substr(lastsdate, 5, 2) + 1, 2, '0') || '01'
-days = date('B', nextsdate, 'S') - date('B', lastsdate, 'S')
+/* correcting: nextsdate & nextdate got mixed up -> everything to nextdate */
+if substr(lastsdate, 5, 2) = '12'
+   then nextdate = (substr(lastsdate, 1, 4) + 1) || '0101'
+   else nextdate = substr(lastsdate, 1, 4) || right(substr(lastsdate, 5, 2) + 1, 2, '0') || '01'
+days = date('B', nextdate, 'S') - date('B', lastsdate, 'S')
 
 /* output the table headers */
 say '<table border="1">'
