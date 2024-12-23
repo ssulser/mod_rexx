@@ -297,6 +297,6 @@ call lineout fn,line
 return result
 
 /* routine to cope with stream v .stream input */
-iput: procedure expose eof
+iput: procedure
 parse arg fn
 return linein(fn)
