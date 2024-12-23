@@ -39,14 +39,14 @@ call setup today
 return 0
 
 setup:
-use arg today
+arg today
 parse var today thisYear +4 thisMonth +2 thisDay +2
 thisMonName=date("M",today,'S')
 thisSdate=thisYear || thisMonth'01'
 thisDayx=(date('B',thisSdate,'S')//7)+1
 lastMonth=right(thisMonth-1,2,0)
 lastYear=thisYear
-if lastmonth<1 then 
+if lastmonth<1 then
   do
   lastMonth=12
   lastYear=thisYear-1
@@ -56,7 +56,7 @@ lastSdate=lastYear || lastMonth'01'
 lastDayx=(date('B',lastSdate,'S')//7)+1
 nextMonth=right(thisMonth+1,2,0)
 nextYear=thisYear
-if nextMonth>12 then 
+if nextMonth>12 then
   do
   nextMonth='01'
   nextYear=thisYear+1
@@ -86,7 +86,7 @@ return 0
 
 <?rexx
 dtab:
-use arg month, days, startday, cdate
+arg month, days, startday, cdate
 /* output the table headers */
 say '<table width="85%" height="33%" border="1">'
 say '<tr><td colspan="7" align ="center"><b>'month'</b></td></tr>'
